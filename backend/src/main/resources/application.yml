@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: menuapp
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/menuapp_db
+    username: postgres
+    password: 123456
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
