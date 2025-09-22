@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CategoryDTO {
     private Long id;
-    private String name; // sadece seçili dildeki isim
+    private String name; 
 }

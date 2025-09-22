@@ -19,7 +19,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryTranslationRepository categoryTranslationRepository;
 
-    // ✅ Belirli dilde tüm kategorileri getir
+    
     @Transactional(readOnly = true)
     public List<CategoryDTO> getCategoriesByLanguage(String lang) {
         List<CategoryTranslation> translations = categoryTranslationRepository.findByLanguageCode(lang);
@@ -29,25 +29,25 @@ public class CategoryService {
                 .toList();
     }
 
-    // ✅ Yeni kategori oluştur (dil parametresine göre translation ekle)
+    
     @Transactional
     public CategoryDTO createCategory(CategoryDTO dto, String lang) {
-        // 1. Yeni Category kaydet
+        
         Category category = new Category();
         Category savedCategory = categoryRepository.save(category);
 
-        // 2. Translation kaydet
+        
         CategoryTranslation translation = new CategoryTranslation();
         translation.setCategory(savedCategory);
         translation.setLanguageCode(lang);
         translation.setName(dto.getName());
         categoryTranslationRepository.save(translation);
 
-        // 3. DTO dön
+        
         return new CategoryDTO(savedCategory.getId(), translation.getName());
     }
 
-    // ✅ Kategoriye yeni dilde translation ekle/güncelle
+    
     @Transactional
     public CategoryDTO upsertCategoryTranslation(Long categoryId, CategoryDTO dto, String lang) {
         Category category = categoryRepository.findById(categoryId)
@@ -68,13 +68,13 @@ public class CategoryService {
         return new CategoryDTO(category.getId(), translation.getName());
     }
 
-    // ✅ Kategori silme
+    
     @Transactional
     public void delete(Long categoryId) {
-        // önce translation'ları sil
+        
         categoryTranslationRepository.deleteById(categoryId);
 
-        // sonra kategoriyi sil
+        
         categoryRepository.deleteById(categoryId);
     }
 }

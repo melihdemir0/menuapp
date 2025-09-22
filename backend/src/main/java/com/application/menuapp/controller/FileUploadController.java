@@ -13,27 +13,27 @@ import java.text.Normalizer;
 @RequestMapping("/files")
 public class FileUploadController {
 
-    // ✅ Sadece ADMIN yükleyebilir
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/upload")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
         try {
-            // Proje içindeki static/images klasörü
+            
             Path uploadPath = Paths.get("src/main/resources/static/images");
 
-            // Klasör yoksa oluştur
+           
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            // Orijinal dosya adını al
+            
             String originalName = file.getOriginalFilename();
 
             if (originalName == null || originalName.isBlank()) {
                 return ResponseEntity.badRequest().body("Geçersiz dosya adı");
             }
 
-            // ✅ Dosya adını normalize et (boşluk ve Türkçe karakterlerden kurtul)
+            // Dosya adını normalize et 
             String safeName = Normalizer.normalize(originalName, Normalizer.Form.NFD)
                     .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
                     .replaceAll("[^a-zA-Z0-9._-]", "_");

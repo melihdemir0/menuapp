@@ -22,14 +22,14 @@ public class MenuItemController {
 
     private final MenuItemService service;
 
-    // ✅ Public: Çoklu dil destekli listeleme
+    
     @GetMapping
     public ResponseEntity<List<MenuItemDto>> getAllByLang(
             @RequestParam(defaultValue = "tr") String lang) {
         return ResponseEntity.ok(service.getMenuByLanguage(lang));
     }
 
-    // ✅ Public: Tek kayıt (TR fallback dahil)
+    
     @GetMapping("/{id}")
     public ResponseEntity<MenuItemDto> getById(
             @PathVariable Long id,
@@ -39,7 +39,7 @@ public class MenuItemController {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Menu item bulunamadı"));
     }
 
-    // ✅ Admin: Yeni ürün oluşturma (lang parametresine göre translation ekler)
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<MenuItemDto> create(
@@ -53,7 +53,7 @@ public class MenuItemController {
         }
     }
 
-    // ✅ Admin: Güncelleme (lang parametresine göre translation günceller)
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<MenuItemDto> update(
@@ -65,7 +65,7 @@ public class MenuItemController {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Güncellenecek ürün bulunamadı"));
     }
 
-    // ✅ Admin: Sil
+    
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

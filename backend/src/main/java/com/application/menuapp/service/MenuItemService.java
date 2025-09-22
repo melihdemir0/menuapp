@@ -28,7 +28,7 @@ public class MenuItemService {
     private final CategoryRepository categoryRepository;
     private final CategoryTranslationRepository categoryTranslationRepository;
 
-    // ✅ Yeni ürün oluşturma (seçilen dil için translation ekler)
+    
     public MenuItemDto create(MenuItemDto dto, String lang) {
         MenuItem item = new MenuItem();
         item.setImagePath(dto.getImagePath());
@@ -63,7 +63,7 @@ public class MenuItemService {
         );
     }
 
-    // ✅ Güncelleme (seçilen dildeki translation günceller)
+   
     public Optional<MenuItemDto> update(Long id, MenuItemDto dto, String lang) {
         return repository.findById(id).map(existing -> {
             existing.setImagePath(dto.getImagePath());
@@ -75,7 +75,7 @@ public class MenuItemService {
 
             MenuItem saved = repository.save(existing);
 
-            // ilgili dilde translation bul veya oluştur
+            
             MenuItemTranslation translation = menuItemTranslationRepository
                     .findByMenuItemIdAndLanguageCode(saved.getId(), lang)
                     .orElseGet(() -> {
@@ -105,7 +105,7 @@ public class MenuItemService {
         });
     }
 
-    // ✅ Silme
+  
     public boolean deleteById(Long id) {
         if (!repository.existsById(id)) {
             return false;
@@ -114,7 +114,7 @@ public class MenuItemService {
         return true;
     }
 
-    // ✅ Çoklu dil destekli menü döndürme
+   
     @Transactional(readOnly = true)
     public List<MenuItemDto> getMenuByLanguage(String lang) {
         return repository.findAll().stream()
@@ -122,7 +122,7 @@ public class MenuItemService {
                 .toList();
     }
 
-    // ✅ Tek item DTO oluşturma (fallback: yoksa TR)
+    
     @Transactional(readOnly = true)
     public MenuItemDto toDtoWithTranslation(MenuItem item, String lang) {
         // Menü item çevirisi
@@ -140,7 +140,7 @@ public class MenuItemService {
         String name = translation != null ? translation.getName() : "";
         String description = translation != null ? translation.getDescription() : "";
 
-        // Kategori çevirisi
+       
         String categoryName = categoryTranslationRepository
                 .findByCategoryIdAndLanguageCode(item.getCategory().getId(), lang)
                 .map(CategoryTranslation::getName)
@@ -160,7 +160,7 @@ public class MenuItemService {
         );
     }
 
-    // ✅ Tek kayıt bulma
+    
     @Transactional(readOnly = true)
     public Optional<MenuItem> findById(Long id) {
         return repository.findById(id);

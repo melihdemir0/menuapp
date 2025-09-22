@@ -67,7 +67,7 @@ public class SecurityConfig {
 																												// serbest
 						.requestMatchers("/api/auth/me").authenticated().requestMatchers("/admin/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
-				.formLogin(form -> form.defaultSuccessUrl("http://localhost:5173/", true) // ✅ React ana sayfasına
+				.formLogin(form -> form.defaultSuccessUrl("http://localhost:5173/", true) // React ana sayfasına
 																							// yönlendir
 						.permitAll())
 				.logout(logout -> logout.logoutSuccessUrl("http://localhost:5173/") // çıkış sonrası da React menüsüne

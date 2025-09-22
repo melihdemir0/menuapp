@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MenuItemDto {
 	private Long id;
-	private String name; // seçili dilde isim
-	private String description; // seçili dilde açıklama
+	private String name; 
+	private String description; 
 	private String imagePath;
 	private BigDecimal price;
-	private CategoryDTO category; // DTO içinde kategori
+	private CategoryDTO category; 
 }

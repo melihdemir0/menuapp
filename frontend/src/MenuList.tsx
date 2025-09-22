@@ -28,7 +28,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
   const [lang, setLang] = useState<"tr" | "en" | "de" | "ru" | "ar">("tr");
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  // 🔹 Modal state
+  //  Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState({
@@ -70,7 +70,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
     );
   }
 
-  // ➕ Yeni ürün
+  //  Yeni ürün
   const handleAddItem = (categoryId: number) => {
     setEditingItem(null);
     setFormData({
@@ -84,7 +84,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
     setIsModalOpen(true);
   };
 
-  // ✏️ Düzenleme
+  //  Düzenleme
   const handleEditItem = (item: MenuItem) => {
     setEditingItem(item);
     setFormData({
@@ -98,7 +98,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
     setIsModalOpen(true);
   };
 
-  // 🗑️ Silme
+  //  Silme
   const handleDeleteItem = async (id: number) => {
     if (!window.confirm("Bu ürünü silmek istediğinize emin misiniz?")) return;
     try {
@@ -179,7 +179,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
       }}
     >
       <div style={{ width: "100%" }}>
-        {/* ✅ Sağ üst: Giriş/Çıkış butonu + dil menüsü */}
+        {/*  Sağ üst: Giriş/Çıkış butonu + dil menüsü */}
         <div
           style={{
             position: "fixed",
@@ -481,7 +481,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
           );
         })}
 
-        {/* 🔹 Admin için kategori yönetimi */}
+        {/*  Admin için kategori yönetimi */}
         {isAdmin && (
           <div style={{ marginTop: 40 }}>
             <CategoryList lang={lang} onChanged={fetchData} />
@@ -489,7 +489,7 @@ export default function MenuList({ isAdmin }: MenuListProps) {
         )}
       </div>
 
-      {/* 🔹 Ürün Ekle/Düzenle Modal */}
+      {/*  Ürün Ekle/Düzenle Modal */}
       {isModalOpen && (
         <div
           style={{

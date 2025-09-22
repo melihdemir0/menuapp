@@ -14,7 +14,7 @@ public class CorsConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration cfg = new CorsConfiguration();
-		// Frontend origin(ler)
+		
 		cfg.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
 		// API'de kullanacağın metodlar
 		cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -22,8 +22,7 @@ public class CorsConfig {
 		cfg.setAllowedHeaders(List.of("*"));
 		// Session cookie kullanacağımız için credentials true
 		cfg.setAllowCredentials(true);
-		// Tarayıcının görebileceği response header'ları istersen ekle
-		// cfg.setExposedHeaders(List.of("Location"));
+	
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", cfg);

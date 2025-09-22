@@ -43,6 +43,6 @@ public class MenuItem {
     private Category category;
 
     @OneToMany(mappedBy = "menuItem", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference  // JSON serialization için
+    @JsonManagedReference  
     private List<MenuItemTranslation> translations = new ArrayList<>();
 }

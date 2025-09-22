@@ -15,9 +15,9 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // ➡️ Backend'e oturum sorgusu: kullanıcı giriş yapmış mı ve hangi rollere sahip?
+    
     fetch("http://localhost:8080/api/auth/me", {
-      credentials: "include", // 🍪 Session cookie taşınsın
+      credentials: "include", 
     })
       .then((res) => {
         if (res.ok) return res.json();
