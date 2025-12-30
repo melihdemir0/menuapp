@@ -3,13 +3,14 @@ spring:
     name: menuapp
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/menuapp_db
+    url: jdbc:postgresql://localhost:5432/menuapp
     username: postgres
     password: 123456
 
   flyway:
     enabled: true
     baseline-on-migrate: true
+    locations: classpath:db/migration
 
   jpa:
     hibernate:

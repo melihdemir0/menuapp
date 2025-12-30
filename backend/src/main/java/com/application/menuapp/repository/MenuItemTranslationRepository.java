@@ -7,7 +7,7 @@ import com.application.menuapp.entity.MenuItemTranslation;
 import java.util.List;
 import java.util.Optional;
 
-//MenuItemTranslationRepository.java
+
 public interface MenuItemTranslationRepository extends JpaRepository<MenuItemTranslation, Long> {
 
  List<MenuItemTranslation> findByLanguageCode(String languageCode);

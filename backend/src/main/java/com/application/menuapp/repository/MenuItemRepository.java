@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.application.menuapp.entity.MenuItem;
 
-//MenuItemRepository.java
+
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
 
  @EntityGraph(attributePaths = "translations")

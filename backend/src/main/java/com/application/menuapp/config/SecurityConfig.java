@@ -19,61 +19,69 @@ import com.application.menuapp.repository.UserRepository;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-	private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-	public SecurityConfig(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+  public SecurityConfig(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-	// Şifreleyici bean (delegating → bcrypt, noop vs. destekler)
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
 
-	// Kullanıcıyı veritabanından yükleyen servis
-	@Bean
-	public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-		return username -> {
-			com.application.menuapp.entity.User user = userRepository.findByUsername(username)
-					.orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı: " + username));
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
 
-			return User.withUsername(user.getUsername()).password(user.getPassword()) // Veritabanındaki şifre (şu an
-																						// admin/admin olabilir)
-					.roles(user.getRole()) // Örn: ADMIN
-					.build();
-		};
-	}
 
-	// AuthenticationManager bean (giriş doğrulama için gerekli)
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-		return authConfig.getAuthenticationManager();
-	}
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return username -> {
+      com.application.menuapp.entity.User user = userRepository.findByUsername(username)
+          .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı: " + username));
 
-	// Güvenlik filtre zinciri
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/files/**").hasRole("ADMIN")
-						.requestMatchers("/", "/menu/**", "/categories/**", "/css/**", "/js/**", "/images/**")
-						.permitAll().requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-						.permitAll().requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-						.requestMatchers("/api/auth/login").permitAll().requestMatchers("/login").permitAll() // ✅
-																												// Spring
-																												// Security
-																												// login
-																												// sayfası
-																												// serbest
-						.requestMatchers("/api/auth/me").authenticated().requestMatchers("/admin/**").hasRole("ADMIN")
-						.anyRequest().authenticated())
-				.formLogin(form -> form.defaultSuccessUrl("http://localhost:5173/", true) // React ana sayfasına
-																							// yönlendir
-						.permitAll())
-				.logout(logout -> logout.logoutSuccessUrl("http://localhost:5173/") // çıkış sonrası da React menüsüne
-																					// dön
-						.permitAll());
+      String dbPass = user.getPassword(); 
+ 
+      if (dbPass != null && !dbPass.startsWith("{")) {
+        dbPass = "{noop}" + dbPass;
+      }
 
-		return http.build();
-	}
+      
+      return User.withUsername(user.getUsername())
+          .password(dbPass)
+          .roles(user.getRole())
+          .build();
+    };
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    return authConfig.getAuthenticationManager();
+  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+      .cors(Customizer.withDefaults())
+      .csrf(csrf -> csrf.disable())
+      .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/files/**").hasRole("ADMIN")
+        .requestMatchers("/", "/menu/**", "/categories/**", "/css/**", "/js/**", "/images/**").permitAll()
+        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+        .requestMatchers("/api/auth/login").permitAll()
+        .requestMatchers("/login").permitAll()
+        .requestMatchers("/api/auth/me").authenticated()
+        .requestMatchers("/admin/**").hasRole("ADMIN")
+        .anyRequest().authenticated()
+      )
+      .formLogin(form -> form
+        .defaultSuccessUrl("http://localhost:5173/", true)
+        .permitAll()
+      )
+      .logout(logout -> logout
+        .logoutSuccessUrl("http://localhost:5173/")
+        .permitAll()
+      );
+
+    return http.build();
+  }
 }
